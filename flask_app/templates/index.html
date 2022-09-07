@@ -10,37 +10,30 @@
 			{% endfor %}
 		{% endif %}
 	{% endwith %}
-<form action="/create_user" method="POST">
-    <label for="fname">First Name:</label>
-    <input type="text" name="fname">
-    <label for="lname">Last Name:</label>
-    <input type="text" name="lname">
-    <label for="email" >Email:</label>
-    <input type="text" name="email">
-	<label for="password" >Password:</label>
-    <input type="text" name="password">
-	<label for="confirm_password" >Confirm Password:</label>
-    <input type="text" name="confirm_password">
-    <input type="submit" value="Add User">
-</form>
-<h1>All Users</h1>
-<table class="table">
-	<tr>
-		<th>ID</th>
-		<th>Full Name</th>
-		<th>Email</th>
-		<th>Created At</th>
-		<th>Actions</th>
-	</tr>
-{% for one_user in all_users %}
-	<tr>
-		<td>{{one_user.id}}</td>
-		<td>{{one_user.first_name}} {{one_user.last_name}}</td>
-		<td>{{one_user.email}}</td>
-		<td>{{one_user.created_at}}</td>
-		<td><a href="users/{{one_user.id}}">Show | </a><a href="users/{{one_user.id}}/edit">Edit | </a><a href="users/{{one_user.id}}/destroy">Delete</a></td>	
-	</tr>
-{% endfor %}
-</table>
-<a href="../new">Add A New User</a>
+<div class="form-group col" style="width: 40%;">
+	<h2>Create User</h2>
+	<form action="/create_user" method="POST">
+		<label for="fname">First Name:</label>
+		<input type="text" name="fname" class="form-control">
+		<label for="lname">Last Name:</label>
+		<input type="text" name="lname" class="form-control">
+		<label for="email" >Email:</label>
+		<input type="text" name="email" class="form-control">
+		<label for="password" >Password:</label>
+		<input type="password" name="password" class="form-control">
+		<label for="confirm_password" >Confirm Password:</label>
+		<input type="password" name="confirm_password" class="form-control">
+		<input type="submit" value="Add User" class="form-control">
+	</form>
+</div>
+<div class="form-group col" style="width: 40%;">
+	<h1>Login</h1>
+	<form action="/login" method="POST">
+		<label for="email" >Email:</label>
+		<input type="text" name="email" class="form-control">
+		<label for="password" >Password:</label>
+		<input type="password" name="password" class="form-control">
+		<input type="submit" value="Login" class="form-control">
+	</form>
+</div>
 </body>

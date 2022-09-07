@@ -25,14 +25,20 @@ def create_user():
     data['password'] = bcrypt.generate_password_hash(request.form['password'])
     current_user = User.save(data)
     session['user'] = current_user
+    print("S E S S I O N")
+    print(session['user'])
     return redirect('/dashboard')
-@app.route("/update_user", methods=['POST'])
-def update_user():
+@app.route("/login", methods=['POST'])
+def login():
     data = {
-        "fname": request.form["fname"],
-        "lname": request.form["lname"],
         "email": request.form["email"],
-        "id": request.form["id"]
-    }    
-    User.update(data)
-    return redirect(f'/users/{data["id"]}')
+        "password": request.form["password"]
+    }
+    user = User.get_by_email(data)
+    if not bcrypt.check_password_hash(user.password, data['password']):
+        flash("Invalid Password!")
+        return redirect('/')
+    if not user:
+        flash("Email Does Not Exist!")
+        return redirect('/')        
+    return redirect('/dashboard')

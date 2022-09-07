@@ -1,6 +1,8 @@
+from typing import ByteString
 from flask_app.config.mysqlconnection import connectToMySQL
 import re
 from flask import flash
+from flask_bcrypt import Bcrypt
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
 USERNAME_REGEX = re.compile(r'[^a-zA-Z]gm')
 class User:
@@ -10,18 +12,17 @@ class User:
         self.last_name = data['last_name']
         self.email = data['email']
         self.password = data['password']
-        self.created_at = data['created_at']
-        self.updated_at = data['updated_at']
     @classmethod
     def save(cls, data ):
         query = "INSERT INTO users ( first_name , last_name , email , password ) VALUES ( %(fname)s , %(lname)s , %(email)s , %(password)s );"
         # data is a dictionary that will be passed into the save method from server.py
         return connectToMySQL('user_schema').query_db( query, data )
     @classmethod
-    def get_one(cls, data):
-        query = "SELECT * FROM users WHERE id=%(id)s"
+    def get_by_email(cls, data):
+        query = "SELECT * FROM users WHERE email=%(email)s"
         results = connectToMySQL('user_schema').query_db(query, data)
         return cls(results[0])
+    @classmethod
     @staticmethod
     def validate_register( user ):
         is_valid = True
@@ -43,4 +44,3 @@ class User:
             flash("Passwords Must Match!")
             is_valid = False
         return is_valid
-
