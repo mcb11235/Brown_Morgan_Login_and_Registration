@@ -9,8 +9,11 @@ def index():
     return render_template("index.html")
 @app.route("/dashboard")
 def show():
-    return render_template("dashboard.html")
-
+    data = {
+        'id': session['user']
+    }
+    user = User.get_one(data)
+    return render_template("dashboard.html", user = user)
 @app.route("/create_user", methods=['POST'])
 def create_user():
     data = {
@@ -24,8 +27,8 @@ def create_user():
         return redirect('/')
     data['password'] = bcrypt.generate_password_hash(request.form['password'])
     current_user = User.save(data)
-    session['user'] = current_user
     print("S E S S I O N")
+    session['user'] = current_user
     print(session['user'])
     return redirect('/dashboard')
 @app.route("/login", methods=['POST'])
@@ -40,5 +43,10 @@ def login():
         return redirect('/')
     if not user:
         flash("Email Does Not Exist!")
-        return redirect('/')        
+        return redirect('/')
+    session['user'] = user.id        
     return redirect('/dashboard')
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect('/')

@@ -23,6 +23,10 @@ class User:
         results = connectToMySQL('user_schema').query_db(query, data)
         return cls(results[0])
     @classmethod
+    def get_one(cls, data):
+        query = "SELECT * FROM users WHERE id=%(id)s"
+        results = connectToMySQL('user_schema').query_db(query, data)
+        return cls(results[0])
     @staticmethod
     def validate_register( user ):
         is_valid = True
